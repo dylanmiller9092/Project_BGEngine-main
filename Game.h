@@ -6,6 +6,17 @@
 //Get the texture files
 #include "Texture.h"
 
+//Get the animation files
+#include "Animation.h"
+
+struct CharacterAnimations {
+	Animation* Idle;
+	Animation* Attack;
+	Animation* Jump;
+	Animation* Cast;
+	Animation* Death;
+};
+
 class Game
 {
 public:
@@ -24,6 +35,10 @@ private:
 
 	//player texture
 	Texture* PlayerTexture;
+	CharacterAnimations PlayerAnims;
+
+	//how long since last update
+	unsigned int LastUpdateTime;
 
 public:
 

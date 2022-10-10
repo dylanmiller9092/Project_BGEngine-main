@@ -36,6 +36,9 @@ bool Game::Start()
 	// create the sdl renderer and define it
 	SdlRenderer = SDL_CreateRenderer(SdlWindow, 0, -1);
 
+	// get the start time of the clock in milliseconds
+	LastUpdateTime = SDL_GetTicks();
+
 	// make sure the renderer worked
 	if (SdlRenderer != nullptr) {
 		cout << "Create Renderer - success" << endl;
@@ -43,8 +46,12 @@ bool Game::Start()
 		//Initalise the Texture
 		PlayerTexture = new Texture();
 		//load the texture
-		if (PlayerTexture->LoadImageFromFile("assets/frame3.png", SdlRenderer)) {
+		if (PlayerTexture->LoadImageFromFile("assets/spritesheet.png", SdlRenderer)) {
 			cout << "Player Texture - success" << endl;
+
+			//Intialise Player Animations
+			PlayerAnims.Attack = new Animation(PlayerTexture, 109, 0.1f, 0, 9);
+			PlayerAnims.Idle = new Animation(PlayerTexture, 109, 0.1f, 65, 68);
 		}
 		else {
 			cout << "Player Texture - failed" << endl;
@@ -67,6 +74,18 @@ void Game::ProcessInput()
 void Game::Update()
 {
 	// @ TODO: Add and changes to the game each frame
+	// howe long since the last frame was updated in milliseconds
+	unsigned int tick = SDL_GetTicks() - LastUpdateTime;
+
+	//change the tick to seconds
+	float DeltaTime = tick / 1000.0f;
+
+	//refresh the last update time
+	LastUpdateTime = SDL_GetTicks();
+
+	// @TODO: Add anything that needs DeltaTime below here
+	PlayerAnims.Attack->Update(DeltaTime);
+	PlayerAnims.Idle->Update(DeltaTime);
 
 	// get how many seconds it's been
 	int Seconds = SDL_GetTicks() / 1000;
@@ -82,11 +101,12 @@ void Game::Draw()
 	// set the draw colour
 	SDL_SetRenderDrawColor(SdlRenderer, 15, 15, 15, 255);
 
-	// clear the renderer
+	// clear the renderers
 	SDL_RenderClear(SdlRenderer);
 
-	// @ TODO: Draw stuff here
-	PlayerTexture->Draw(SdlRenderer, 0, 0);
+	// @ TODO: Draw stuff herea
+	PlayerAnims.Attack->Draw(SdlRenderer, 50, 50, 2);
+	PlayerAnims.Idle->Draw(SdlRenderer, 100, 100, 10, true);
 
 	SDL_RenderPresent(SdlRenderer);
 }
