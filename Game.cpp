@@ -43,32 +43,36 @@ bool Game::Start()
 	if (SdlRenderer != nullptr) {
 		cout << "Create Renderer - success" << endl;
 
-		//Initalise the Texture
+		//Initalise the player Texture
 		PlayerTexture = new Texture();
-		//load the texture
-		if (PlayerTexture->LoadImageFromFile("assets/spritesheet.png", SdlRenderer)) {
-			cout << "Player Texture - success" << endl;
+		//load the player texture
+		PlayerTexture->LoadImageFromFile("assets/spritesheet.png", SdlRenderer);
 
-			//Intialise Player Animations
-			PlayerAnims.Attack = new Animation(PlayerTexture, 109, 0.1f, 0, 9);
-			PlayerAnims.Idle = new Animation(PlayerTexture, 109, 0.1f, 65, 68);
-		}
-		else {
-			cout << "Player Texture - failed" << endl;
-			return false;
-		}
+		//Construct the player
+		Character* Player = new Character(PlayerTexture, 0, 0, 109);
+		GameObjects.push_back(Player);
 
-		return true;
+		//Initalise the enemy Texture
+		EnemyTexture = new Texture();
+		//load the enemy texture
+		EnemyTexture->LoadImageFromFile("assets/goblin-spritesheet-65x35-28.png", SdlRenderer);
+
+		//Construct the enemy
+		Character* Enemy = new Character(EnemyTexture, 0, 35, 28);
+		GameObjects.push_back(Enemy);
 	}
 
-	cout << "Create Renderer - failed" << endl;
-	
-	return false;
+	return true;
 }
 
 void Game::ProcessInput()
 {
 	// @ TODO: Process player inputs
+
+	//cycle through all game objects and run their inputs
+	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
+		GameObjects[i]->Input();
+	}
 }
 
 void Game::Update()
@@ -84,8 +88,12 @@ void Game::Update()
 	LastUpdateTime = SDL_GetTicks();
 
 	// @TODO: Add anything that needs DeltaTime below here
-	PlayerAnims.Attack->Update(DeltaTime);
-	PlayerAnims.Idle->Update(DeltaTime);
+
+
+	//cycle through all game objects and run their update
+	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
+		GameObjects[i]->Update(DeltaTime);
+	}
 
 	// get how many seconds it's been
 	int Seconds = SDL_GetTicks() / 1000;
@@ -105,8 +113,11 @@ void Game::Draw()
 	SDL_RenderClear(SdlRenderer);
 
 	// @ TODO: Draw stuff herea
-	PlayerAnims.Attack->Draw(SdlRenderer, 50, 50, 2);
-	PlayerAnims.Idle->Draw(SdlRenderer, 100, 100, 10, true);
+
+	//Cycle through all game objects and run their draw
+	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
+		GameObjects[i]->Draw(SdlRenderer);
+	}
 
 	SDL_RenderPresent(SdlRenderer);
 }

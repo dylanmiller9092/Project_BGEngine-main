@@ -2,20 +2,19 @@
 
 // setup SDL
 #include <SDL.h>
-
 //Get the texture files
 #include "Texture.h"
-
 //Get the animation files
 #include "Animation.h"
-
-struct CharacterAnimations {
-	Animation* Idle;
-	Animation* Attack;
-	Animation* Jump;
-	Animation* Cast;
-	Animation* Death;
-};
+//Get the GameObject
+#include "GameObject.h"
+//Get the Character header
+#include "Character.h"
+//Get the Collectable Header
+#include "Collectable.h"
+//get needed libraries
+#include <iostream>
+#include <vector>
 
 class Game
 {
@@ -35,7 +34,11 @@ private:
 
 	//player texture
 	Texture* PlayerTexture;
-	CharacterAnimations PlayerAnims;
+
+	//Enemy texture
+	Texture* EnemyTexture;
+
+	vector<GameObject*> GameObjects;
 
 	//how long since last update
 	unsigned int LastUpdateTime;

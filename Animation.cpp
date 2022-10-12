@@ -17,6 +17,8 @@ Animation::Animation(Texture* InSpriteSheet, int InNumberOfFrames, float InFrame
 	FrameDuration = InFrameDuration;
 	FrameTimer = 0.0f;
 
+	CurrentFrame = StartFrame;
+
 	// set the width and height of the each sprite in the spritesheet
 	if (SpriteSheet != nullptr) {
 		// splice the spritesheet into its frames
