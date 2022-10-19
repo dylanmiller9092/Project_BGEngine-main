@@ -1,9 +1,10 @@
 #include "GameObject.h"
+#include "Vector2.h"
+#include "Input.h"
 
 GameObject::GameObject()
 {
-	PositionX = 0;
-	PositionY = 0;
+	Position = Vector2(0, 0);
 	ObjectTexture = nullptr;
 }
 
@@ -19,6 +20,7 @@ void GameObject::Update(float DeltaTime)
 {
 }
 
-void GameObject::Input()
+void GameObject::ProcessInput(Input* UserInput)
 {
+
 }

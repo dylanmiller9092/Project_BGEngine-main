@@ -1,6 +1,8 @@
 #pragma once
 #include "SDL.h"
 #include "Texture.h"
+#include "Vector2.h"
+#include "Input.h"
 
 class GameObject
 {
@@ -10,12 +12,11 @@ public:
 
 	virtual void Draw(SDL_Renderer* Renderer);
 	virtual void Update(float DeltaTime);
-	virtual void Input();
+	virtual void ProcessInput(Input* UserInput);
 
 protected: 
 	//positions for the game object to display on the window
-	int PositionX;
-	int PositionY;
+	Vector2 Position;
 	//The objects texture
 	Texture* ObjectTexture;
 };

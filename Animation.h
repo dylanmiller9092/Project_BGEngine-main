@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "Texture.h"
+#include "Vector2.h"
 
 class Animation
 {
@@ -20,7 +21,7 @@ public:
 	void Update(float DeltaTime);
 
 	//Draw the texture to screen at the positions and scale
-	void Draw(SDL_Renderer* Renderer, int PosX = 0, int PosY = 0, int Scale = 1, bool Flip = false);
+	void Draw(SDL_Renderer* Renderer, Vector2 Pos, int Scale = 1, bool Flip = false);
 
 	int GetFrameWidth() { return FrameWidth; }
 

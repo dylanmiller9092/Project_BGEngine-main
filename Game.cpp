@@ -1,6 +1,9 @@
 #include <iostream>
 #include "Game.h"
 #include "Texture.h"
+#include "Input.h"
+#include "Player.h"
+#include "Enemy.h"
 using namespace std;
 
 // constructor
@@ -43,23 +46,30 @@ bool Game::Start()
 	if (SdlRenderer != nullptr) {
 		cout << "Create Renderer - success" << endl;
 
+		//Start detecting input
+		UserInput = new Input();
+
 		//Initalise the player Texture
 		PlayerTexture = new Texture();
 		//load the player texture
 		PlayerTexture->LoadImageFromFile("assets/spritesheet.png", SdlRenderer);
 
 		//Construct the player
-		Character* Player = new Character(PlayerTexture, 0, 0, 109);
-		GameObjects.push_back(Player);
+		Player* PlayerCharacter = new Player(PlayerTexture, Vector2(0,0), 109);
+		GameObjects.push_back(PlayerCharacter);
 
 		//Initalise the enemy Texture
 		EnemyTexture = new Texture();
 		//load the enemy texture
 		EnemyTexture->LoadImageFromFile("assets/goblin-spritesheet-65x35-28.png", SdlRenderer);
 
-		//Construct the enemy
-		Character* Enemy = new Character(EnemyTexture, 0, 35, 28);
-		GameObjects.push_back(Enemy);
+		//Construct the enemy as an enemy using the enemy texture
+		Enemy* Enemy1 = new Enemy(EnemyTexture, Vector2(0,37), 28);
+		GameObjects.push_back(Enemy1);
+
+		//Construct the second enemy as an enemy using the same enemy texture
+		Enemy* Enemy2 = new Enemy(EnemyTexture, Vector2(0, 72), 28);
+		GameObjects.push_back(Enemy2);
 	}
 
 	return true;
@@ -68,10 +78,11 @@ bool Game::Start()
 void Game::ProcessInput()
 {
 	// @ TODO: Process player inputs
+	UserInput->UpdateInput(bIsGameOver);
 
 	//cycle through all game objects and run their inputs
 	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
-		GameObjects[i]->Input();
+		GameObjects[i]->ProcessInput(UserInput);
 	}
 }
 
@@ -86,6 +97,8 @@ void Game::Update()
 
 	//refresh the last update time
 	LastUpdateTime = SDL_GetTicks();
+	
+	
 
 	// @TODO: Add anything that needs DeltaTime below here
 
@@ -93,14 +106,6 @@ void Game::Update()
 	//cycle through all game objects and run their update
 	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
 		GameObjects[i]->Update(DeltaTime);
-	}
-
-	// get how many seconds it's been
-	int Seconds = SDL_GetTicks() / 1000;
-
-	// after 10 seconds kill the program
-	if (Seconds > 9) {
-		bIsGameOver = true;
 	}
 }
 
@@ -112,7 +117,7 @@ void Game::Draw()
 	// clear the renderers
 	SDL_RenderClear(SdlRenderer);
 
-	// @ TODO: Draw stuff herea
+	// @ TODO: Draw stuff here
 
 	//Cycle through all game objects and run their draw
 	for (unsigned int i = 0; i < GameObjects.size(); ++i) {

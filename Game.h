@@ -12,6 +12,8 @@
 #include "Character.h"
 //Get the Collectable Header
 #include "Collectable.h"
+//Get the Input header
+#include "Input.h"
 //get needed libraries
 #include <iostream>
 #include <vector>
@@ -38,7 +40,10 @@ private:
 	//Enemy texture
 	Texture* EnemyTexture;
 
+	//Initialise all objects
 	vector<GameObject*> GameObjects;
+
+	Input* UserInput;
 
 	//how long since last update
 	unsigned int LastUpdateTime;
