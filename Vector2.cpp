@@ -143,10 +143,10 @@ Vector2 Vector2::Normalised()
 		this->y = 0;
 	}
 
-	return Vector2();
+	return Result;
 }
 
 Vector2 Vector2::Zero()
 {
-	return Vector2();
+	return Vector2(0, 0);
 }

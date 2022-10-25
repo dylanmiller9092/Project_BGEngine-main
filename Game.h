@@ -14,6 +14,8 @@
 #include "Collectable.h"
 //Get the Input header
 #include "Input.h"
+//Get the Collider Header
+#include "Collider.h"
 //get needed libraries
 #include <iostream>
 #include <vector>
@@ -42,6 +44,9 @@ private:
 
 	//Initialise all objects
 	vector<GameObject*> GameObjects;
+
+	//all the colliders in the game will be stored here
+	vector<Collider*> BoxColliders;
 
 	Input* UserInput;
 

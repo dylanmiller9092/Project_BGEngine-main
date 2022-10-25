@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Collider.h"
 using namespace std;
 
 // constructor
@@ -55,21 +56,23 @@ bool Game::Start()
 		PlayerTexture->LoadImageFromFile("assets/spritesheet.png", SdlRenderer);
 
 		//Construct the player
-		Player* PlayerCharacter = new Player(PlayerTexture, Vector2(0,0), 109);
+		Player* PlayerCharacter = new Player(PlayerTexture, Vector2(0, 0), 109);
 		GameObjects.push_back(PlayerCharacter);
-
+		BoxColliders.push_back(PlayerCharacter->GetCollision());
 		//Initalise the enemy Texture
 		EnemyTexture = new Texture();
 		//load the enemy texture
 		EnemyTexture->LoadImageFromFile("assets/goblin-spritesheet-65x35-28.png", SdlRenderer);
 
 		//Construct the enemy as an enemy using the enemy texture
-		Enemy* Enemy1 = new Enemy(EnemyTexture, Vector2(0,37), 28);
+		Enemy* Enemy1 = new Enemy(EnemyTexture, Vector2(0, 37), 28);
 		GameObjects.push_back(Enemy1);
+		BoxColliders.push_back(Enemy1->GetCollision());
 
 		//Construct the second enemy as an enemy using the same enemy texture
 		Enemy* Enemy2 = new Enemy(EnemyTexture, Vector2(0, 72), 28);
 		GameObjects.push_back(Enemy2);
+		BoxColliders.push_back(Enemy2->GetCollision());
 	}
 
 	return true;
@@ -107,6 +110,11 @@ void Game::Update()
 	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
 		GameObjects[i]->Update(DeltaTime);
 	}
+
+	//run the detection for the box colliders
+	for (unsigned int i = 0; i < BoxColliders.size(); ++i) {
+		BoxColliders[i]->Update(DeltaTime, BoxColliders);
+	}
 }
 
 void Game::Draw()
@@ -122,6 +130,11 @@ void Game::Draw()
 	//Cycle through all game objects and run their draw
 	for (unsigned int i = 0; i < GameObjects.size(); ++i) {
 		GameObjects[i]->Draw(SdlRenderer);
+	}
+
+	//cycle through all box colliders and run their draw
+	for (unsigned int i = 0; i < BoxColliders.size(); ++i) {
+		BoxColliders[i]-> Draw(SdlRenderer);
 	}
 
 	SDL_RenderPresent(SdlRenderer);
